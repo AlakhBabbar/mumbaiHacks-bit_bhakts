@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import AboutPage from './aboutPage';
 
-const LandingPage = ({ onLogin }) => {
-  const [showLogin, setShowLogin] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+const LandingPage = ({ onLogin, onSignup }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -28,123 +26,6 @@ const LandingPage = ({ onLogin }) => {
   // Animated letters for MoneyAura
   const letters = "MoneyAura".split("");
   
-  if (showLogin) {
-    return (
-      <div className="min-h-screen bg-linear-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 border border-green-200">
-            <button
-              onClick={() => setShowLogin(false)}
-              className="text-gray-500 hover:text-gray-700 mb-6 flex items-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back
-            </button>
-            
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-green-600 to-emerald-600 mb-2">
-                {isLogin ? 'Welcome Back' : 'Join MoneyAura'}
-              </h2>
-              <p className="text-gray-600">
-                {isLogin ? 'Sign in to continue' : 'Create your account'}
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {!isLogin && (
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
-                    placeholder="Enter your name"
-                    required={!isLogin}
-                  />
-                </div>
-              )}
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition"
-                  placeholder="Enter password"
-                  required
-                />
-              </div>
-
-              {isLogin && (
-                <div className="flex items-center justify-between text-sm">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500" />
-                    <span className="text-gray-600">Remember me</span>
-                  </label>
-                  <a href="#" className="text-green-600 hover:text-green-700 font-medium">
-                    Forgot password?
-                  </a>
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className="w-full bg-linear-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition duration-200 shadow-lg hover:shadow-xl"
-              >
-                {isLogin ? 'Sign In' : 'Create Account'}
-              </button>
-            </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-gray-600 text-sm">
-                {isLogin ? "Don't have an account? " : "Already have an account? "}
-                <button
-                  onClick={() => setIsLogin(!isLogin)}
-                  className="text-green-600 hover:text-green-700 font-semibold"
-                >
-                  {isLogin ? 'Sign up' : 'Sign in'}
-                </button>
-              </p>
-            </div>
-
-            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
-              <p className="text-sm text-green-800 text-center">
-                Demo Mode - Use any credentials to explore
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -182,13 +63,13 @@ const LandingPage = ({ onLogin }) => {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '1.3s', animationFillMode: 'both' }}>
           <button
-            onClick={() => setShowLogin(true)}
+            onClick={() => onSignup && onSignup()}
             className="bg-linear-to-r from-green-400 to-emerald-400 text-black px-10 py-4 rounded-xl font-bold hover:from-green-300 hover:to-emerald-300 transition shadow-xl shadow-green-500/50 hover:shadow-2xl hover:shadow-green-400/60 text-lg transform hover:scale-105"
           >
             Get Started
           </button>
           <button
-            onClick={() => setShowLogin(true)}
+            onClick={() => onLogin && onLogin()}
             className="bg-gray-900 text-green-300 px-10 py-4 rounded-xl font-bold hover:bg-gray-800 transition shadow-lg shadow-green-500/30 border-2 border-green-400/50 text-lg transform hover:scale-105"
           >
             Sign In
@@ -202,7 +83,7 @@ const LandingPage = ({ onLogin }) => {
       </div>
 
       {/* About Section */}
-      <AboutPage onGetStarted={() => setShowLogin(true)} />
+      <AboutPage onGetStarted={() => onSignup && onSignup()} />
 
       {/* CSS Animations */}
       <style>{`
