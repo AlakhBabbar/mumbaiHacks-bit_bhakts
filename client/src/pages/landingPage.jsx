@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import AboutPage from './aboutPage';
 
 const LandingPage = ({ onLogin }) => {
   const [showLogin, setShowLogin] = useState(false);
@@ -146,12 +147,13 @@ const LandingPage = ({ onLogin }) => {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden">
-      {/* Decorative background elements */}
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Animated Background Shine */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-teal-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-green-400 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-80 h-80 bg-emerald-400 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-teal-400 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-300 rounded-full mix-blend-screen filter blur-3xl opacity-15"></div>
       </div>
 
       {/* Main Content */}
@@ -162,7 +164,7 @@ const LandingPage = ({ onLogin }) => {
             {letters.map((letter, index) => (
               <span
                 key={index}
-                className="inline-block text-transparent bg-clip-text bg-linear-to-br from-green-600 via-emerald-600 to-teal-600 animate-letter-fall"
+                className="inline-block text-transparent bg-clip-text bg-linear-to-br from-green-300 via-emerald-400 to-teal-300 animate-letter-fall"
                 style={{
                   animationDelay: `${index * 0.1}s`,
                   animationFillMode: 'both'
@@ -172,7 +174,7 @@ const LandingPage = ({ onLogin }) => {
               </span>
             ))}
           </h1>
-          <p className="text-center text-2xl text-gray-700 font-light animate-fade-in-up" style={{ animationDelay: '1s', animationFillMode: 'both' }}>
+          <p className="text-center text-2xl text-gray-100 font-light animate-fade-in-up" style={{ animationDelay: '1s', animationFillMode: 'both' }}>
             Your AI-Powered Financial Coach
           </p>
         </div>
@@ -181,32 +183,26 @@ const LandingPage = ({ onLogin }) => {
         <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '1.3s', animationFillMode: 'both' }}>
           <button
             onClick={() => setShowLogin(true)}
-            className="bg-linear-to-r from-green-600 to-emerald-600 text-white px-10 py-4 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition shadow-xl hover:shadow-2xl text-lg transform hover:scale-105"
+            className="bg-linear-to-r from-green-400 to-emerald-400 text-black px-10 py-4 rounded-xl font-bold hover:from-green-300 hover:to-emerald-300 transition shadow-xl shadow-green-500/50 hover:shadow-2xl hover:shadow-green-400/60 text-lg transform hover:scale-105"
           >
             Get Started
           </button>
           <button
             onClick={() => setShowLogin(true)}
-            className="bg-white text-green-700 px-10 py-4 rounded-xl font-semibold hover:bg-green-50 transition shadow-lg border-2 border-green-200 text-lg transform hover:scale-105"
+            className="bg-gray-900 text-green-300 px-10 py-4 rounded-xl font-bold hover:bg-gray-800 transition shadow-lg shadow-green-500/30 border-2 border-green-400/50 text-lg transform hover:scale-105"
           >
             Sign In
           </button>
         </div>
 
         {/* Tagline */}
-        <p className="text-gray-600 text-center max-w-2xl animate-fade-in-up" style={{ animationDelay: '1.6s', animationFillMode: 'both' }}>
+        <p className="text-gray-100 text-center max-w-2xl animate-fade-in-up" style={{ animationDelay: '1.6s', animationFillMode: 'both' }}>
           Smart financial management powered by AI. Track, analyze, and optimize your money with intelligent insights.
         </p>
-
-        {/* Footer Badge */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in" style={{ animationDelay: '2s', animationFillMode: 'both' }}>
-          <div className="bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-green-200">
-            <p className="text-sm text-gray-600">
-              <span className="font-semibold text-green-700">Mumbai Hackathon 2025</span> • RBI AA-Ready
-            </p>
-          </div>
-        </div>
       </div>
+
+      {/* About Section */}
+      <AboutPage onGetStarted={() => setShowLogin(true)} />
 
       {/* CSS Animations */}
       <style>{`
