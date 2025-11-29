@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import FinancialDataUpload from '../components/FinancialDataUpload';
+import ChatBot from '../components/ChatBot';
 
 const FinancialDataPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -126,6 +127,9 @@ const FinancialDataPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Floating ChatBot */}
+      <ChatBot />
     </div>
   );
 };

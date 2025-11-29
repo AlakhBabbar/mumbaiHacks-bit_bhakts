@@ -4,6 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import Sidebar from '../components/Sidebar';
 import MutualFundsWidget from '../components/MutualFundsWidget';
 import StockPortfolioWidget from '../components/StockPortfolioWidget';
+import ChatBot from '../components/ChatBot';
 import { Bot, TrendingUp, TrendingDown, CreditCard, PieChart, Activity, Repeat, DollarSign, UtensilsCrossed, Car, ShoppingBag, Film, Zap, Stethoscope, BarChart3, FileText } from 'lucide-react';
 
 const Dashboard = () => {
@@ -123,9 +124,10 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-black">
-      {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+    <>
+      <div className="flex min-h-screen bg-black">
+        {/* Sidebar */}
+        <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
       {/* Main Content Area */}
       <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
@@ -378,6 +380,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      </div>
 
       {/* CSS Animations */}
       <style>{`
@@ -405,7 +408,10 @@ const Dashboard = () => {
           animation-delay: 4s;
         }
       `}</style>
-    </div>
+
+      {/* Floating ChatBot */}
+      <ChatBot />
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Sidebar from '../components/Sidebar';
+import ChatBot from '../components/ChatBot';
 
 const AlertsPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -31,6 +32,9 @@ const AlertsPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Floating ChatBot */}
+      <ChatBot />
     </div>
   );
 };
