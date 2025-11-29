@@ -9,6 +9,7 @@ import Dashboard from './pages/dashboardPage'
 import GoalsPage from './pages/goalsPage'
 import AlertsPage from './pages/alertsPage'
 import NotificationsPage from './pages/notificationsPage'
+import FinancialDataPage from './pages/financialDataPage'
 import { auth } from './firebase/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 
@@ -123,6 +124,14 @@ function App() {
           element={
             <ProtectedRoute>
               <NotificationsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/financial-data" 
+          element={
+            <ProtectedRoute>
+              <FinancialDataPage />
             </ProtectedRoute>
           } 
         />

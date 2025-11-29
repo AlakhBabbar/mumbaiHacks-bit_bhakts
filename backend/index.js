@@ -3,6 +3,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import stockTrendRoute from "./routes/stockTrend.js";
+import financialDataRoute from "./routes/financialData.js";
 
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/agent", stockTrendRoute);
+app.use("/api/financial", financialDataRoute);
 
 // Test route
 app.get("/", (req, res) => {
