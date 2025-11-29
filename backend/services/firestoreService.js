@@ -337,10 +337,19 @@ class FirestoreFinancialService {
   /**
    * Get all holdings for a user
    */
-  async getHoldings(userId) {
+  async getHoldings(userId, category = null) {
     try {
       const holdingsRef = collection(db, 'users', userId, 'holdings');
-      const snapshot = await getDocs(holdingsRef);
+      let q;
+
+      if (category) {
+        // Filter by category if provided
+        q = query(holdingsRef, where('category', '==', category));
+      } else {
+        q = holdingsRef;
+      }
+
+      const snapshot = await getDocs(q);
 
       const holdings = [];
       snapshot.forEach(doc => {

@@ -20,62 +20,80 @@ class GeminiFinancialExtractor {
   generateExtractionPrompt(pdfText) {
     return `You are a financial data extraction expert. Analyze the following bank statement or financial document text and extract structured data.
 
-IMPORTANT INSTRUCTIONS:
-1. Extract ALL transactions found in the document
-2. Identify bank account details if present
-3. Identify any investment holdings (stocks, mutual funds, bonds) if present
-4. Return data in VALID JSON format only - no markdown, no code blocks, no explanations
-5. Use the exact structure provided below
-6. For dates, use ISO 8601 format (YYYY-MM-DD)
-7. For transaction types: use "debit" or "credit" only
-8. For instrument types: use "MF", "Equity", or "Bond" only
-9. If information is missing, use empty strings or 0 for numbers
-10. Categorize transactions intelligently based on description
+CRITICAL: Return data in the EXACT structure shown below. This structure matches our dashboard display requirements.
 
-EXPECTED JSON STRUCTURE:
+REQUIRED JSON STRUCTURE:
 {
   "bankAccounts": [
     {
-      "accountType": "Savings/Current/Credit Card",
-      "accountNumberMasked": "XXXX-XXXX-1234",
-      "ifsc": "IFSC code",
-      "currentBalance": 0,
-      "currency": "INR",
-      "bankName": "Bank name"
+      "accountType": "Savings" | "Current" | "Credit",
+      "accountNumberMasked": "XXXX1234",
+      "ifsc": "BANK0001234",
+      "currentBalance": 50000,
+      "currency": "INR"
     }
   ],
   "transactions": [
     {
-      "date": "YYYY-MM-DD",
-      "amount": 0,
-      "type": "debit/credit",
-      "description": "Transaction description",
-      "category": "Food/Transport/Salary/Investment/Bills/Shopping/Healthcare/Entertainment/Other",
-      "balance": 0,
-      "metadata": {
-        "mode": "UPI/Card/Net Banking/Cash/Cheque",
-        "reference": "Transaction reference number",
-        "merchant": "Merchant or payee name"
-      }
+      "date": "2024-01-15",
+      "amount": 5000,
+      "type": "debit" | "credit",
+      "description": "Grocery Shopping at BigBazaar",
+      "category": "Food" | "Transport" | "Shopping" | "Entertainment" | "Bills" | "Healthcare" | "Investment" | "Salary" | "Other"
     }
   ],
   "holdings": [
     {
-      "instrumentName": "Instrument name",
-      "instrumentType": "MF/Equity/Bond",
-      "quantity": 0,
-      "averageBuyPrice": 0,
-      "currentPrice": 0,
-      "symbol": "Trading symbol",
-      "isin": "ISIN code"
+      "instrumentName": "Reliance Industries",
+      "instrumentType": "Equity" | "MF",
+      "category": "Stock" | "Mutual Fund" | "SIP",
+      "quantity": 10,
+      "averageBuyPrice": 2450.50,
+      "currentPrice": 2580.75,
+      "currency": "INR"
     }
   ]
 }
 
-DOCUMENT TEXT:
+EXTRACTION RULES:
+1. TRANSACTIONS:
+   - date: YYYY-MM-DD format
+   - amount: Must be positive number (absolute value)
+   - type: ONLY "debit" or "credit"
+   - description: Clear transaction description
+   - category: Choose from: Food, Transport, Shopping, Entertainment, Bills, Healthcare, Investment, Salary, Other
+   - Intelligently categorize based on merchant/description (e.g., Swiggy→Food, Uber→Transport, Amazon→Shopping)
+
+2. HOLDINGS (Stocks/Mutual Funds/SIPs):
+   - instrumentName: Full name (e.g., "Reliance Industries", "HDFC Top 100 Fund")
+   - instrumentType: "Equity" for stocks, "MF" for mutual funds/SIPs
+   - category: "Stock" for equity shares, "Mutual Fund" for MF, "SIP" for SIP investments
+   - quantity: Number of shares/units
+   - averageBuyPrice: Average purchase price per unit (MUST be positive number)
+   - currentPrice: Current market price (MUST be positive number, if not available use averageBuyPrice)
+   - currency: Default "INR"
+
+3. BANK ACCOUNTS:
+   - accountType: "Savings", "Current", or "Credit"
+   - accountNumberMasked: Last 4 digits with XXXX prefix (e.g., "XXXX1234")
+   - ifsc: IFSC code if available
+   - currentBalance: Current balance amount
+   - currency: Default "INR"
+
+4. CATEGORY INFERENCE:
+   - If holding has "SIP" in name → category: "SIP"
+   - If instrumentType is "Equity" → category: "Stock"
+   - If instrumentType is "MF" and no SIP mention → category: "Mutual Fund"
+
+5. DATA QUALITY:
+   - All prices must be positive numbers > 0
+   - Dates must be valid and parseable
+   - Remove any entries with missing critical fields (amount, date, instrumentName)
+
+DOCUMENT TEXT TO ANALYZE:
 ${pdfText}
 
-Extract and return ONLY the JSON object with the financial data. No explanations, no markdown formatting.`;
+RETURN ONLY THE JSON OBJECT - NO MARKDOWN, NO EXPLANATIONS, NO CODE BLOCKS.`;
   }
 
   /**
@@ -167,10 +185,10 @@ Extract and return ONLY the JSON object with the financial data. No explanations
   }
 
   /**
-   * Sanitize and clean extracted data
+   * Sanitize and clean extracted data - Match dashboard display format exactly
    */
   sanitizeExtractedData(data) {
-    // Clean bank accounts - remove entries missing critical fields
+    // Clean bank accounts - Match dashboard structure
     const sanitizedBankAccounts = data.bankAccounts
       .filter(account => account && typeof account === 'object')
       .map(account => ({
@@ -178,55 +196,96 @@ Extract and return ONLY the JSON object with the financial data. No explanations
         accountNumberMasked: account.accountNumberMasked || account.accountNumber || 'XXXX',
         ifsc: account.ifsc || '',
         currentBalance: parseFloat(account.currentBalance) || 0,
-        currency: account.currency || 'INR',
-        bankName: account.bankName || 'Unknown Bank',
-        lastUpdated: account.lastUpdated || new Date().toISOString(),
-        createdAt: account.createdAt || new Date().toISOString()
+        currency: account.currency || 'INR'
       }))
-      .filter(account => account.accountNumberMasked !== 'XXXX' || account.bankName !== 'Unknown Bank');
+      .filter(account => account.accountNumberMasked !== 'XXXX');
 
-    // Clean transactions - remove invalid entries
+    // Clean transactions - Match dashboard transaction structure
     const sanitizedTransactions = data.transactions
       .filter(txn => txn && typeof txn === 'object')
       .filter(txn => txn.date && txn.amount && ['debit', 'credit'].includes(txn.type))
-      .map(txn => ({
-        date: new Date(txn.date),
-        amount: parseFloat(txn.amount),
-        type: txn.type,
-        description: txn.description || 'Transaction',
-        category: txn.category || 'Other',
-        currency: txn.currency || 'INR',
-        metadata: {
-          mode: txn.metadata?.mode || txn.mode || '',
-          reference: txn.metadata?.reference || txn.reference || '',
-          merchant: txn.metadata?.merchant || txn.merchant || ''
-        }
-      }));
+      .map(txn => {
+        // Ensure absolute value for amount
+        const amount = Math.abs(parseFloat(txn.amount));
+        
+        return {
+          date: new Date(txn.date),
+          amount: amount,
+          type: txn.type,
+          description: txn.description || 'Transaction',
+          category: this.normalizeCategory(txn.category)
+        };
+      });
 
-    // Clean holdings - remove entries with invalid data
+    // Clean holdings - Match dashboard holdings structure (Stock, Mutual Fund, SIP)
     const sanitizedHoldings = data.holdings
       .filter(holding => holding && typeof holding === 'object')
       .filter(holding => 
         holding.instrumentName && 
-        ['MF', 'Equity', 'Bond'].includes(holding.instrumentType) &&
         holding.quantity > 0 &&
         holding.averageBuyPrice > 0
       )
-      .map(holding => ({
-        instrumentName: holding.instrumentName,
-        instrumentType: holding.instrumentType,
-        quantity: parseFloat(holding.quantity),
-        averageBuyPrice: parseFloat(holding.averageBuyPrice),
-        currentPrice: parseFloat(holding.currentPrice) || parseFloat(holding.averageBuyPrice),
-        currency: holding.currency || 'INR',
-        purchaseDate: holding.purchaseDate || new Date().toISOString()
-      }));
+      .map(holding => {
+        // Auto-categorize based on instrumentType and name
+        let category = holding.category;
+        let instrumentType = holding.instrumentType;
+        
+        if (!category) {
+          if (instrumentType === 'Equity') {
+            category = 'Stock';
+          } else if (instrumentType === 'MF') {
+            // Check if it's a SIP
+            category = holding.instrumentName?.toLowerCase().includes('sip') ? 'SIP' : 'Mutual Fund';
+          } else {
+            // Default to Mutual Fund for unknown types
+            category = 'Mutual Fund';
+            instrumentType = 'MF';
+          }
+        }
+
+        // Ensure instrumentType is set correctly
+        if (!instrumentType) {
+          instrumentType = category === 'Stock' ? 'Equity' : 'MF';
+        }
+
+        const avgPrice = parseFloat(holding.averageBuyPrice);
+        const currentPrice = parseFloat(holding.currentPrice) || avgPrice;
+
+        return {
+          instrumentName: holding.instrumentName,
+          instrumentType: instrumentType,
+          category: category,
+          quantity: parseFloat(holding.quantity),
+          averageBuyPrice: avgPrice,
+          currentPrice: currentPrice,
+          currency: holding.currency || 'INR'
+        };
+      });
 
     return {
       bankAccounts: sanitizedBankAccounts,
       transactions: sanitizedTransactions,
       holdings: sanitizedHoldings
     };
+  }
+
+  /**
+   * Normalize transaction category to match dashboard categories
+   */
+  normalizeCategory(category) {
+    if (!category) return 'Other';
+    
+    const validCategories = [
+      'Food', 'Transport', 'Shopping', 'Entertainment', 
+      'Bills', 'Healthcare', 'Investment', 'Salary', 'Other'
+    ];
+    
+    // Find matching category (case-insensitive)
+    const normalized = validCategories.find(
+      cat => cat.toLowerCase() === category.toLowerCase()
+    );
+    
+    return normalized || 'Other';
   }
 
   /**

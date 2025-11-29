@@ -260,7 +260,7 @@ router.get('/transactions', async (req, res) => {
 
 /**
  * GET /api/financial/holdings
- * Get all holdings for authenticated user
+ * Get all holdings for authenticated user with optional category filter
  */
 router.get('/holdings', async (req, res) => {
   try {
@@ -272,7 +272,8 @@ router.get('/holdings', async (req, res) => {
       });
     }
 
-    const result = await firestoreService.getHoldings(userId);
+    const category = req.query.category; // Optional: Stock, Mutual Fund, SIP, ETF, etc.
+    const result = await firestoreService.getHoldings(userId, category);
     return res.status(200).json(result);
   } catch (error) {
     console.error('Error fetching holdings:', error);
@@ -317,6 +318,37 @@ router.get('/summary', async (req, res) => {
     return res.status(500).json({
       success: false,
       error: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/financial/ai-summary
+ * Generate AI-powered financial summary using Gemini
+ */
+router.get('/ai-summary', async (req, res) => {
+  try {
+    const userId = req.query.userId || req.user?.uid;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'User authentication required'
+      });
+    }
+
+    // Import the financial summary agent
+    const { generateFinancialSummary } = await import('../agents/financialSummaryAgent.js');
+    
+    // Generate AI summary
+    const result = await generateFinancialSummary(userId);
+    
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error('Error generating AI summary:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      summary: 'Unable to generate financial summary at this time.'
     });
   }
 });

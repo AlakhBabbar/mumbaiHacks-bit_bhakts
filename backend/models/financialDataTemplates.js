@@ -45,6 +45,7 @@ const transactionTemplate = {
 const holdingTemplate = {
   instrumentName: "",       // Name of the instrument (stock/fund name)
   instrumentType: "",       // "MF" (Mutual Fund), "Equity", "Bond"
+  category: "",             // "Stock", "Mutual Fund", "SIP", "ETF", "Index Fund", "Debt Fund"
   quantity: 0,              // Number of units held
   averageBuyPrice: 0,       // Average purchase price per unit
   currentPrice: 0,          // Current market price per unit
@@ -108,6 +109,10 @@ const validators = {
     if (!['MF', 'Equity', 'Bond'].includes(data.instrumentType)) {
       errors.push("Instrument type must be 'MF', 'Equity', or 'Bond'");
     }
+    const validCategories = ['Stock', 'Mutual Fund', 'SIP', 'ETF', 'Index Fund', 'Debt Fund', 'Equity', 'Bond'];
+    if (data.category && !validCategories.includes(data.category)) {
+      errors.push(`Category must be one of: ${validCategories.join(', ')}`);
+    }
     if (typeof data.quantity !== 'number' || data.quantity <= 0) {
       errors.push("Quantity must be a positive number");
     }
@@ -155,6 +160,7 @@ const createHolding = (data) => {
   const holding = {
     ...holdingTemplate,
     ...data,
+    category: data.category || (data.instrumentType === 'Equity' ? 'Stock' : data.instrumentType === 'MF' ? 'Mutual Fund' : 'Investment'),
     createdAt: now,
     updatedAt: now
   };
