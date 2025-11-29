@@ -121,42 +121,42 @@ const getFinancialDataTool = tool(
 export async function generateFinancialSummary(userId) {
   const key = ensureKey();
   
-  const model = new ChatGoogleGenerativeAI({
-    model: "gemini-2.5-flash",
-    apiKey: key,
-    temperature: 0.3,
-  }).bindTools([getFinancialDataTool]);
+  try {
+    // Fetch financial data directly instead of using tool binding
+    const financialData = await getFinancialDataTool._call({ userId });
+    
+    const model = new ChatGoogleGenerativeAI({
+      model: "gemini-2.5-flash",
+      apiKey: key,
+      temperature: 0.3,
+    });
 
-  const prompt = ChatPromptTemplate.fromMessages([
-    [
-      "system",
-      `You are a professional financial advisor AI. Your job is to:
-1. First, use the getFinancialData tool to fetch the user's complete financial data
-2. Analyze their financial situation comprehensively
-3. Generate a brief, insightful summary (2-3 sentences) about their overall financial health
-4. Highlight key positives and areas for improvement
-5. Keep it encouraging but realistic
+    const prompt = ChatPromptTemplate.fromMessages([
+      [
+        "system",
+        `You are a professional financial advisor AI. Analyze the user's financial data and generate a brief, insightful summary (2-3 sentences) about their overall financial health.
 
-The summary should be concise, actionable, and easy to understand. Focus on:
+Focus on:
 - Overall financial health
 - Key strengths (good savings rate, diversified investments, etc.)
 - Main concerns (high spending in certain categories, low emergency fund, etc.)
 - One simple recommendation
 
-Return ONLY a plain text summary, no JSON, no formatting, just 2-3 clear sentences.`
-    ],
-    [
-      "human",
-      `Generate a financial summary for user: {userId}
+Keep it encouraging but realistic. Return ONLY a plain text summary, no JSON, no formatting, just 2-3 clear sentences.`
+      ],
+      [
+        "human",
+        `Here is the user's financial data:
 
-Use the getFinancialData tool to fetch their data first, then provide your analysis.`
-    ],
-  ]);
+{financialData}
 
-  const chain = prompt.pipe(model).pipe(new StringOutputParser());
-  
-  try {
-    const summary = await chain.invoke({ userId });
+Based on this data, provide a concise financial summary.`
+      ],
+    ]);
+
+    const chain = prompt.pipe(model).pipe(new StringOutputParser());
+    
+    const summary = await chain.invoke({ financialData });
     return {
       success: true,
       summary: summary.trim(),

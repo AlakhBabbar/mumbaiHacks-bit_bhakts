@@ -7,11 +7,45 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      // Initial greeting when chat opens for first time
+      loadChatHistory();
+    }
+  }, [isOpen]);
+
+  const loadChatHistory = async () => {
+    setLoadingHistory(true);
+    try {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const response = await fetch(`http://localhost:3000/api/chat/history?userId=${user.uid}`);
+      const data = await response.json();
+
+      if (data.success && data.data.length > 0) {
+        // Load existing conversation
+        const historyMessages = data.data.map(msg => ({
+          role: msg.role,
+          content: msg.content,
+          timestamp: new Date(msg.timestamp?.seconds * 1000 || msg.timestamp)
+        }));
+        setMessages(historyMessages);
+      } else {
+        // Show initial greeting if no history
+        setMessages([
+          {
+            role: 'assistant',
+            content: 'Hello! I\'m your financial AI assistant. I have access to your financial data and can help you with spending insights, investment advice, goal planning, and more. How can I help you today?',
+            timestamp: new Date()
+          }
+        ]);
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+      // Show greeting on error
       setMessages([
         {
           role: 'assistant',
@@ -19,8 +53,10 @@ const ChatBot = () => {
           timestamp: new Date()
         }
       ]);
+    } finally {
+      setLoadingHistory(false);
     }
-  }, [isOpen]);
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -34,6 +70,12 @@ const ChatBot = () => {
     e.preventDefault();
     if (!input.trim() || loading) return;
 
+    const user = auth.currentUser;
+    if (!user) {
+      alert('Please login to use the chat assistant');
+      return;
+    }
+
     const userMessage = {
       role: 'user',
       content: input.trim(),
@@ -41,30 +83,36 @@ const ChatBot = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageContent = input.trim();
     setInput('');
     setLoading(true);
 
     try {
-      const user = auth.currentUser;
       const response = await fetch('http://localhost:3000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: user?.uid,
-          message: input.trim(),
-          history: messages.slice(-10)
+          userId: user.uid,
+          message: messageContent
         })
       });
 
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
       const data = await response.json();
 
-      const assistantMessage = {
-        role: 'assistant',
-        content: data.response || 'I apologize, but I encountered an error. Please try again.',
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
+      if (data.success) {
+        const assistantMessage = {
+          role: 'assistant',
+          content: data.response,
+          timestamp: new Date(data.timestamp || new Date())
+        };
+        setMessages(prev => [...prev, assistantMessage]);
+      } else {
+        throw new Error(data.error || 'Failed to get response');
+      }
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage = {

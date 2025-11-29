@@ -5,6 +5,7 @@ import cors from "cors";
 import stockTrendRoute from "./routes/stockTrend.js";
 import financialDataRoute from "./routes/financialData.js";
 import goalsRoute from "./routes/goals.js";
+import chatRoute from "./routes/chat.js";
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/agent", stockTrendRoute);
 app.use("/api/financial", financialDataRoute);
 app.use("/api/goals", goalsRoute);
+app.use("/api/chat", chatRoute);
 
 // Test route
 app.get("/", (req, res) => {
