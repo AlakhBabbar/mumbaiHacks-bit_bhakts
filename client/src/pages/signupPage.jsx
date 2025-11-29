@@ -13,6 +13,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
     confirmPassword: ''
   });
 
+  const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState('');
@@ -99,6 +100,12 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
         profileComplete: false
       });
 
+      // Save credentials if Remember Me is checked
+      if (rememberMe) {
+        localStorage.setItem('rememberMe', 'true');
+        localStorage.setItem('userEmail', formData.email);
+      }
+
       console.log('User registered:', { user, formData });
       
       // Redirect to questionnaire
@@ -172,7 +179,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
     <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Animated Background Shine - Same as landing page */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-green-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob"></div>
         <div className="absolute top-40 right-10 w-80 h-80 bg-emerald-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
         <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-teal-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
@@ -183,7 +190,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
           {/* Back Button */}
           <button
             onClick={onBackToHome}
-            className="text-gray-100 hover:text-green-300 mb-6 flex items-center gap-2 transition-colors"
+            className="text-gray-100 hover:text-emerald-300 mb-6 flex items-center gap-2 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -205,11 +212,11 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
           )}
 
           {/* Form Card */}
-          <div className="bg-gray-950/70 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-green-400/30 shadow-2xl shadow-green-400/20">
+          <div className="bg-gray-950/70 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-emerald-400/30 shadow-2xl shadow-emerald-400/20">
                 
 
             <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-300 mb-3">
+              <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-400 mb-3">
                 Create Your Account
               </h2>
               <p className="text-gray-100 text-lg">
@@ -229,7 +236,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-400 focus:border-transparent outline-none transition"
                       placeholder="Enter your full name"
                     />
                     {errors.fullName && <p className="text-red-400 text-sm mt-1">{errors.fullName}</p>}
@@ -246,7 +253,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-400 focus:border-transparent outline-none transition"
                     />
                     {errors.dateOfBirth && <p className="text-red-400 text-sm mt-1">{errors.dateOfBirth}</p>}
                   </div>
@@ -262,7 +269,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-400 focus:border-transparent outline-none transition"
                       placeholder="you@example.com"
                     />
                     {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
@@ -279,7 +286,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-400 focus:border-transparent outline-none transition"
                       placeholder="+91 98765 43210"
                     />
                     {errors.phoneNumber && <p className="text-red-400 text-sm mt-1">{errors.phoneNumber}</p>}
@@ -296,7 +303,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-400 focus:border-transparent outline-none transition"
                       placeholder="Minimum 8 characters"
                     />
                     {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
@@ -313,17 +320,31 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition"
+                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-400 focus:border-transparent outline-none transition"
                       placeholder="Re-enter your password"
                     />
                     {errors.confirmPassword && <p className="text-red-400 text-sm mt-1">{errors.confirmPassword}</p>}
+                  </div>
+
+                  {/* Remember Me */}
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="rememberMe"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="w-4 h-4 rounded border-gray-700 bg-gray-900/50 text-emerald-400 focus:ring-2 focus:ring-emerald-400 focus:ring-offset-0 cursor-pointer"
+                    />
+                    <label htmlFor="rememberMe" className="text-sm text-gray-100 cursor-pointer">
+                      Remember me
+                    </label>
                   </div>
 
                   {/* Sign Up Button */}
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-gradient-to-r from-green-400 to-emerald-400 text-black py-4 rounded-xl font-bold text-lg hover:from-green-300 hover:to-emerald-300 transition duration-200 shadow-xl shadow-green-400/30 hover:shadow-2xl hover:shadow-green-400/40 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-emerald-400 to-emerald-400 text-black py-4 rounded-xl font-bold text-lg hover:from-emerald-300 hover:to-emerald-300 transition duration-200 shadow-xl shadow-emerald-400/30 hover:shadow-2xl hover:shadow-emerald-400/40 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
                   >
                     {loading && (
                       <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -349,10 +370,10 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
                     type="button"
                     onClick={handleGoogleSignup}
                     disabled={loading}
-                    className="w-full bg-gray-900 text-gray-100 py-4 rounded-xl font-semibold hover:bg-gray-800 transition duration-200 shadow-lg border-2 border-gray-700 hover:border-green-400/50 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-gray-900 text-gray-100 py-4 rounded-xl font-semibold hover:bg-gray-800 transition duration-200 shadow-lg border-2 border-gray-700 hover:border-emerald-400/50 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (
-                      <svg className="animate-spin h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin h-5 w-5 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -374,7 +395,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
                 Already have an account?{' '}
                 <button
                   onClick={() => onLogin && onLogin()}
-                  className="text-green-300 hover:text-green-200 font-semibold"
+                  className="text-emerald-400 hover:text-emerald-300 font-semibold"
                 >
                   Sign in
                 </button>
@@ -385,7 +406,7 @@ const SignupPage = ({ onSignupComplete, onBackToHome, onLogin }) => {
           {/* Trust Badge */}
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-400">
-              <span className="font-semibold text-green-300">Secure</span> • End-to-End Encrypted • RBI AA-Ready
+              <span className="font-semibold text-emerald-400">Secure</span> • End-to-End Encrypted • RBI AA-Ready
             </p>
           </div>
         </div>

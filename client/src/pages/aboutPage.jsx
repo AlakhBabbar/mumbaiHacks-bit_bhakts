@@ -5,7 +5,7 @@ const AboutPage = ({ onGetStarted }) => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
-            What is <span className="text-transparent bg-clip-text bg-linear-to-r from-green-300 to-emerald-300">MoneyAura</span>?
+            What is <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-400 to-emerald-400">MoneyAura</span>?
           </h2>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto">
             Your intelligent companion that transforms how you manage money through AI-driven insights and motivation
@@ -15,15 +15,15 @@ const AboutPage = ({ onGetStarted }) => {
         {/* Key Features Grid */}
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           {/* Feature 1 */}
-          <div className="bg-gray-950/70 backdrop-blur-sm rounded-2xl p-8 hover:shadow-2xl hover:shadow-green-400/30 transition-all duration-300 border border-green-400/30">
+          <div className="bg-gray-950/70 backdrop-blur-sm rounded-2xl p-8 hover:shadow-2xl hover:shadow-emerald-400/30 transition-all duration-300 border border-emerald-400/30">
             <div className="flex items-start gap-4">
-              <div className="bg-green-400 p-3 rounded-xl shrink-0">
+              <div className="bg-emerald-400 p-3 rounded-xl shrink-0">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-green-300 mb-2">AI-Driven Insights</h3>
+                <h3 className="text-xl font-bold text-emerald-400 mb-2">AI-Driven Insights</h3>
                 <p className="text-gray-100">
                   Get personalized recommendations and real-time alerts that adapt to your spending patterns
                 </p>
@@ -84,7 +84,7 @@ const AboutPage = ({ onGetStarted }) => {
         </div>
 
         {/* CTA Section */}
-        <div className="text-center bg-linear-to-r from-green-400 to-emerald-400 rounded-3xl p-12 text-black shadow-2xl shadow-green-400/40">
+        <div className="text-center bg-linear-to-r from-emerald-400 to-emerald-400 rounded-3xl p-12 text-black shadow-2xl shadow-emerald-400/40">
           <h3 className="text-3xl md:text-4xl font-bold mb-4">
             Ready to Transform Your Financial Journey?
           </h3>
@@ -93,7 +93,7 @@ const AboutPage = ({ onGetStarted }) => {
           </p>
           <button
             onClick={onGetStarted}
-            className="bg-black text-green-300 px-12 py-4 rounded-xl font-bold text-lg hover:bg-gray-900 transition shadow-2xl border-2 border-green-400 transform hover:scale-105"
+            className="bg-black text-emerald-400 px-12 py-4 rounded-xl font-bold text-lg hover:bg-gray-900 transition shadow-2xl border-2 border-emerald-400 transform hover:scale-105"
           >
             Start Your Journey Now
           </button>
@@ -102,7 +102,7 @@ const AboutPage = ({ onGetStarted }) => {
         {/* Trust Badge */}
         <div className="mt-12 text-center">
           <p className="text-sm text-gray-200">
-            <span className="font-semibold text-green-300">Mumbai Hackathon 2025</span> • RBI AA-Ready • Secure & Private
+            <span className="font-semibold text-emerald-400">Mumbai Hackathon 2025</span> • RBI AA-Ready • Secure & Private
           </p>
         </div>
       </div>

@@ -96,37 +96,37 @@ const QuestionnairePage = ({ onComplete, onBackToHome }) => {
     { 
       id: 'student', 
       label: 'Student', 
-      icon: <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>,
+      icon: <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>,
       desc: 'Learning to manage finances' 
     },
     { 
       id: 'professional', 
       label: 'Working Professional', 
-      icon: <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+      icon: <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
       desc: 'Building wealth steadily' 
     },
     { 
       id: 'trader', 
       label: 'Active Trader', 
-      icon: <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>,
+      icon: <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>,
       desc: 'Regular market participation' 
     },
     { 
       id: 'investor', 
       label: 'Long-term Investor', 
-      icon: <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+      icon: <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
       desc: 'Growing wealth over time' 
     },
     { 
       id: 'entrepreneur', 
       label: 'Entrepreneur', 
-      icon: <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
+      icon: <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
       desc: 'Managing business finances' 
     },
     { 
       id: 'freelancer', 
       label: 'Freelancer', 
-      icon: <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+      icon: <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
       desc: 'Variable income management' 
     }
   ];
@@ -174,7 +174,7 @@ const QuestionnairePage = ({ onComplete, onBackToHome }) => {
     <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-green-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob"></div>
         <div className="absolute top-40 right-10 w-80 h-80 bg-emerald-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
         <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-teal-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
@@ -184,7 +184,7 @@ const QuestionnairePage = ({ onComplete, onBackToHome }) => {
         <div className="w-full max-w-2xl">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-300 mb-3">
+            <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-400 mb-3">
               Let's Personalize
             </h1>
             <p className="text-gray-100 text-lg">
@@ -206,7 +206,7 @@ const QuestionnairePage = ({ onComplete, onBackToHome }) => {
           )}
 
           {/* Form Card */}
-          <div className="bg-gray-950/70 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-green-400/30 shadow-2xl shadow-green-400/20">
+          <div className="bg-gray-950/70 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-emerald-400/30 shadow-2xl shadow-emerald-400/20">
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* User Type Selection */}
               <div>
@@ -221,8 +221,8 @@ const QuestionnairePage = ({ onComplete, onBackToHome }) => {
                       onClick={() => handleChange({ target: { name: 'userType', value: type.id } })}
                       className={`p-4 rounded-xl border-2 transition-all text-left ${
                         formData.userType === type.id
-                          ? 'bg-green-400/20 border-green-400 shadow-lg shadow-green-400/30'
-                          : 'bg-gray-900/30 border-gray-700 hover:border-green-400/50 hover:bg-gray-900/50'
+                          ? 'bg-emerald-400/20 border-emerald-400 shadow-lg shadow-emerald-400/30'
+                          : 'bg-gray-900/30 border-gray-700 hover:border-emerald-400/50 hover:bg-gray-900/50'
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -232,7 +232,7 @@ const QuestionnairePage = ({ onComplete, onBackToHome }) => {
                           <div className="text-sm text-gray-400">{type.desc}</div>
                         </div>
                         {formData.userType === type.id && (
-                          <svg className="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-6 h-6 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
                         )}
@@ -282,7 +282,7 @@ const QuestionnairePage = ({ onComplete, onBackToHome }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-green-400 to-emerald-400 text-black py-4 rounded-xl font-bold text-lg hover:from-green-300 hover:to-emerald-300 transition duration-200 shadow-xl shadow-green-400/30 hover:shadow-2xl hover:shadow-green-400/40 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-emerald-400 to-emerald-400 text-black py-4 rounded-xl font-bold text-lg hover:from-emerald-300 hover:to-emerald-300 transition duration-200 shadow-xl shadow-emerald-400/30 hover:shadow-2xl hover:shadow-emerald-400/40 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
               >
                 {loading && (
                   <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -298,7 +298,7 @@ const QuestionnairePage = ({ onComplete, onBackToHome }) => {
           {/* Trust Badge */}
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-400">
-              <span className="font-semibold text-green-300">Secure</span> • End-to-End Encrypted • RBI AA-Ready
+              <span className="font-semibold text-emerald-400">Secure</span> • End-to-End Encrypted • RBI AA-Ready
             </p>
           </div>
         </div>
