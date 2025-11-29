@@ -1,10 +1,9 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages';
-import { InMemoryChatMessageHistory } from '@langchain/core/chat_history';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { collection, addDoc, getDocs, query, where, orderBy, limit, Timestamp, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebase.js';
 import { getFinancialDataTool } from './tools/financialDataTool.js';
+import { getGoalCreatorTool } from './tools/goalCreatorTool.js';
 
 /**
  * Chat Agent with conversation memory and financial data access
@@ -18,19 +17,6 @@ class ChatAgent {
       temperature: 0.7,
       maxOutputTokens: 2048,
     });
-
-    // In-memory chat histories per user
-    this.chatHistories = new Map();
-  }
-
-  /**
-   * Get or create chat history for a user
-   */
-  getChatHistory(userId) {
-    if (!this.chatHistories.has(userId)) {
-      this.chatHistories.set(userId, new InMemoryChatMessageHistory());
-    }
-    return this.chatHistories.get(userId);
   }
 
   /**
@@ -117,6 +103,45 @@ class ChatAgent {
         ? history.map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`).join('\n')
         : 'No previous conversation.';
 
+      // Check if user wants to create a goal
+      const goalKeywords = ['create goal', 'make goal', 'new goal', 'set goal', 'goal for me', 'financial goal', 'help me with goal'];
+      const wantsToCreateGoal = goalKeywords.some(keyword => userMessage.toLowerCase().includes(keyword));
+
+      if (wantsToCreateGoal) {
+        console.log('User wants to create a goal, invoking goal creator tool...');
+        
+        // Use the goal creator tool
+        const goalCreatorTool = getGoalCreatorTool();
+        const toolResult = await goalCreatorTool._call({
+          userId,
+          context: `${historyText}\n\nUser's latest message: ${userMessage}`
+        });
+        
+        const goalResponse = JSON.parse(toolResult);
+        
+        if (goalResponse.success) {
+          const responseMessage = `${goalResponse.message}\n\nGoal Details:\n- Title: ${goalResponse.goalTitle}\n- Target: ₹${goalResponse.targetAmount.toLocaleString('en-IN')}\n- Deadline: ${goalResponse.targetDate}\n- Category: ${goalResponse.category}`;
+          
+          // Save both messages to Firestore
+          await Promise.all([
+            this.saveMessage(userId, 'user', userMessage),
+            this.saveMessage(userId, 'assistant', responseMessage)
+          ]);
+          
+          return {
+            success: true,
+            response: responseMessage,
+            timestamp: new Date().toISOString(),
+            goalCreated: true,
+            goalId: goalResponse.goalId
+          };
+        } else {
+          // Tool failed, fall back to regular response
+          console.log('Goal creation failed, falling back to regular chat');
+        }
+      }
+
+      // Regular chat response (no goal creation)
       // Build context-aware prompt
       const systemPrompt = `You are a helpful financial AI assistant. You have access to the user's financial data and conversation history.
 
@@ -125,7 +150,7 @@ ${financialContext || 'No financial data available yet. Encourage user to upload
 
 CAPABILITIES:
 - Analyze spending patterns and provide insights
-- Help with financial goal planning
+- Help with financial goal planning (suggest creating goals if user mentions wanting to save or invest)
 - Answer questions about investments, stocks, mutual funds, and SIPs
 - Provide personalized financial advice based on user's data
 - Explain financial concepts and strategies
@@ -137,13 +162,14 @@ GUIDELINES:
 - If you don't have enough information, ask clarifying questions
 - Use rupee symbol for currency amounts
 - Keep responses concise but informative (2-4 sentences typically)
+- If user wants to create a goal, tell them to say "create a goal for me" or "make a new goal"
 
 PREVIOUS CONVERSATION:
 ${historyText}
 
 Now respond to the user's latest message.`;
 
-      // Use direct model invocation instead of template
+      // Use direct model invocation
       const messages = [
         new SystemMessage(systemPrompt),
         new HumanMessage(userMessage)
@@ -181,12 +207,6 @@ Now respond to the user's latest message.`;
    */
   async clearHistory(userId) {
     try {
-      // Clear in-memory chat history
-      if (this.chatHistories.has(userId)) {
-        const chatHistory = this.chatHistories.get(userId);
-        await chatHistory.clear();
-      }
-      
       // Clear Firestore history
       const conversationsRef = collection(db, 'users', userId, 'chatHistory');
       const snapshot = await getDocs(conversationsRef);
